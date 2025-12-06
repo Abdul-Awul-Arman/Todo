@@ -3,15 +3,13 @@ import { useState } from "react";
 import Form from "./Form";
 import Todo from "./Todo";
 
-
-
-
-function App() {
-  interface Todo{
+ interface Todo{
     id: number
     text: string
     completed: boolean
   }
+function App() {
+ 
     let todosObj:Todo[]=[
     {id: 1,
     text: "Learn TypeScript ",
@@ -23,6 +21,7 @@ function App() {
     text: "Build a React App ",
     completed: false}
     ];
+
   let [todos, setTodos] = useState<Todo[]>(todosObj)
 
   
@@ -33,6 +32,7 @@ function App() {
     const newTodos=todos.filter((todo)=>todo.id !==id);
     setTodos(newTodos);
   }
+
   function handleEdit(todo:Todo,todoText:string){
     const updatedTodos=todos.map((t)=>t.id===todo.id?
                                      {...t,text:todoText}
@@ -50,11 +50,8 @@ function App() {
                                     );
 
     setTodos(updatedTodos as Todo[]);
-
-   
-
-   
   };
+
   function addTodo(text:string){
     const newTodo:Todo={
       id:todos.length+1,
@@ -64,7 +61,7 @@ function App() {
     setTodos([...todos,newTodo]);
   }
 
-   console.log(todos);
+   
   return (
     <div className="bg-[#313647] w-full h-screen flex justify-center items-center gap-10">
       <div className="w-[500px] bg-[#456882] p-5 rounded-lg">
