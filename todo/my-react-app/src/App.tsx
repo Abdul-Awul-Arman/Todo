@@ -22,7 +22,11 @@ function App() {
     completed: false}
     ];
 
-  let [todos, setTodos] = useState<Todo[]>(todosObj)
+        const [todos, setTodos] = useState<Todo[]>(todosObj)
+        const [isEdit,setIsEdit]=useState<boolean>(false );
+        const [currentTodo,setCurrentTodo]=useState<Todo>({id:0,text:"",completed:false});
+
+
 
   
 
@@ -33,15 +37,28 @@ function App() {
     setTodos(newTodos);
   }
 
-  function handleEdit(todo:Todo,todoText:string){
-    const updatedTodos=todos.map((t)=>t.id===todo.id?
+  function handleEdit(todo:Todo){
+    console.log("Editing todo:", todo);
+    setCurrentTodo(todo);
+    setIsEdit(true);
+  };
+
+  function handleUpdateTodo(todo:Todo,todoText:string){
+    console.log("Updating todo:", todo);
+        const updatedTodos=todos.map((t)=>t.id===todo.id?
                                      {...t,text:todoText}
                                     :t
                                     );
 
     setTodos(updatedTodos as Todo[]);
+    setIsEdit(false);
+    setCurrentTodo({id:0,text:"",completed:false});
+  }
 
-  };
+  // function handleCancelEdit(){
+  //   setIsEdit(false);
+  //   setCurrentTodo({id:0,text:"",completed:false});
+  // }
 
   function handleStats(todo:Todo){
     const updatedTodos=todos.map((t)=>t.id===todo.id?
@@ -61,19 +78,27 @@ function App() {
     setTodos([...todos,newTodo]);
   }
 
-   
+  
+    function handleCancel(){
+      setIsEdit(false);
+      setCurrentTodo({id:0,text:"",completed:false});
+    }
+
+
+  //  console.log(currentTodo);
   return (
     <div className="bg-[#313647] w-full h-screen flex justify-center items-center gap-10">
       <div className="w-[500px] bg-[#456882] p-5 rounded-lg">
-       <Form addTodo={addTodo}  />
+       <Form addTodo={addTodo} isEdit={isEdit} currentTodo={currentTodo} handleCancel={handleCancel} handleUpdateTodo={handleUpdateTodo}   />
       </div>
       <div className="w-[500px] bg-[#456882] p-5 rounded-lg h-[500px] overflow-y-auto">
-        {todos.map((todo)=>{
+        { todos.length?   todos.map((todo)=>{
           return(
 
-            todos &&<Todo key={todo.id} todo={todo} handleDelete={handleDelete} handleEdit={handleEdit} handleStats={handleStats}  />
+           <Todo key={todo.id} todo={todo} handleDelete={handleDelete} handleEdit={handleEdit} handleStats={handleStats} currentTodo={ setCurrentTodo}  />
           )
-        })}
+        }
+        ):<p className="text-white text-center">No todos available. Please add some todos.</p>}
       </div>
     
     
